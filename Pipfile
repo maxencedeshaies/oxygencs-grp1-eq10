@@ -6,6 +6,11 @@ name = "pypi"
 [packages]
 requests = "*"
 signalrcore = "*"
+pylint = "*"
+pytest = "*"
+black = "*"
+mypy = "*"
+pre-commit = "*"
 
 [dev-packages]
 
@@ -14,5 +19,7 @@ python_version = "3.8"
 
 [scripts]
 start = "python src/main.py"
-test = "# To implement"
-lint = "# To implement"
+test = "pytest"
+lint = "pylint --recursive=y src"
+format = "black src"
+typecheck = "mypy src"
