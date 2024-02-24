@@ -3,6 +3,7 @@ import logging
 import requests
 import json
 import time
+import os
 
 
 class App:
@@ -11,11 +12,11 @@ class App:
         self.TICKS = 10
 
         # To be configured by your team
-        self.HOST = None  # Setup your host here
-        self.TOKEN = None  # Setup your token here
-        self.T_MAX = None  # Setup your max temperature here
-        self.T_MIN = None  # Setup your min temperature here
-        self.DATABASE_URL = None  # Setup your database here
+        self.HOST = os.getenv('HOST', 'Host URL not found')
+        self.TOKEN = os.getenv('TOKEN', 'Token not found')
+        self.T_MAX = os.getenv('T_MAX', 'Max temp not found')
+        self.T_MIN = os.getenv('T_MIN', 'Min temp not found')
+        self.DATABASE_URL = os.getenv('DATABASE_URL', 'Database URL not found')
 
     def __del__(self):
         if self._hub_connection != None:
