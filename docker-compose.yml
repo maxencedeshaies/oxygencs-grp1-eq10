@@ -1,0 +1,12 @@
+version: '3'
+services:
+  oxygencs-grp1-eq10:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/usr/local/src/oxygencs-grp1-eq10'
+    environment:
+      - PYTHONUNBUFFERED=1
+    command:
+      - pipenv run start
