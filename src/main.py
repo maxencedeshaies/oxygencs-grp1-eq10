@@ -4,6 +4,7 @@ import requests
 import json
 import time
 import os
+import psycopg2
 
 
 class App:
@@ -60,7 +61,7 @@ class App:
             timestamp = data[0]["date"]
             temperature = float(data[0]["data"])
             self.take_action(temperature)
-            self.save_event_to_database(timestamp, temperature)
+            self.save_event_to_database(timestamp, temperature, self.DATABASE_URL, "temperaturelog")
         except Exception as err:
             print(err)
 
@@ -77,13 +78,17 @@ class App:
         details = json.loads(r.text)
         print(details, flush=True)
 
-    def save_event_to_database(self, timestamp, temperature):
+    def save_event_to_database(self, timestamp, temperature, databaseUrl, tableName):
         """Save sensor data into database."""
+        sql = f"""INSERT INTO {tableName}(timestamp, temperature) VALUES(TIMESTAMP '{timestamp}',{temperature})"""
         try:
-            # To implement
+            with psycopg2.connect(databaseUrl) as conn:
+                with conn.cursor() as cur:
+                    cur.execute(sql)
+                    conn.commit()
             pass
-        except requests.exceptions.RequestException as e:
-            # To implement
+        except (requests.exceptions.RequestException, psycopg2.DatabaseError) as e:
+            print(e)
             pass
 
 
