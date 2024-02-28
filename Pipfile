@@ -6,14 +6,14 @@ name = "pypi"
 [packages]
 requests = "*"
 signalrcore = "*"
+
+[dev-packages]
 pylint = "*"
 pytest = "*"
 black = "*"
 mypy = "*"
 pre-commit = "*"
 types-requests = "*"
-
-[dev-packages]
 
 [requires]
 python_version = "3.8"
