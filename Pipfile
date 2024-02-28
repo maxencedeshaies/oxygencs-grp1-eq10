@@ -11,6 +11,7 @@ pytest = "*"
 black = "*"
 mypy = "*"
 pre-commit = "*"
+types-requests = "*"
 
 [dev-packages]
 
@@ -22,4 +23,3 @@ start = "python src/main.py"
 test = "pytest"
 lint = "pylint --recursive=y src"
 format = "black src"
-typecheck = "mypy src"
