@@ -5,8 +5,10 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - '.:/usr/local/src/oxygencs-grp1-eq10'
+      - '.:/app'
     environment:
       - PYTHONUNBUFFERED=1
     command:
-      - pipenv run start
+      - pipenv
+      - run
+      - start
