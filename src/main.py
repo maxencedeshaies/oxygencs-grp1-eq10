@@ -80,16 +80,15 @@ class App:
 
     def save_event_to_database(self, timestamp, temperature, databaseUrl, tableName):
         """Save sensor data into database."""
-        sql = f"""INSERT INTO {tableName}(timestamp, temperature) VALUES(TIMESTAMP '{timestamp}',{temperature})"""
-        try:
-            with psycopg2.connect(databaseUrl) as conn:
-                with conn.cursor() as cur:
-                    cur.execute(sql)
-                    conn.commit()
-            pass
-        except (requests.exceptions.RequestException, psycopg2.DatabaseError) as e:
-            print(e)
-            pass
+        if None not in (temperature, timestamp):
+            sql = f"""INSERT INTO {tableName}(timestamp, temperature) VALUES(TIMESTAMP '{timestamp}',{temperature})"""
+            try:
+                with psycopg2.connect(databaseUrl) as conn:
+                    with conn.cursor() as cur:
+                        cur.execute(sql)
+                        conn.commit()
+            except (requests.exceptions.RequestException, psycopg2.DatabaseError) as e:
+                print(e)
 
 
 if __name__ == "__main__":
