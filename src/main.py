@@ -1,6 +1,7 @@
 """Handles the main logic of the Oxygen CS application"""
 
 import logging
+import os
 import json
 import time
 import requests
@@ -17,11 +18,11 @@ class App:
         self.ticks = 10
 
         # To be configured by your team
-        self.host = None  # Setup your host here
-        self.token = None  # Setup your token here
-        self.t_max = None  # Setup your max temperature here
-        self.t_min = None  # Setup your min temperature here
-        self.database_url = None  # Setup your database here
+        self.host = os.getenv("HOST", "Host URL not found")
+        self.token = os.getenv("TOKEN", "Token not found")
+        self.t_max = os.getenv("T_MAX", "Max temp not found")
+        self.t_min = os.getenv("T_MIN", "Min temp not found")
+        self.database_url = os.getenv("DATABASE_URL", "Database URL not found")
 
     def __del__(self):
         if self._hub_connection is not None:

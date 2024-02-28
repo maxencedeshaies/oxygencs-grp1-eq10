@@ -7,6 +7,7 @@ repos:
         entry: pipenv run test
         language: system
         types: [python]
+        pass_filenames: false 
       - id: formatting
         name: Formatting the code
         entry: pipenv run format
@@ -19,6 +20,7 @@ repos:
         types: [python]
       - id: typecheck
         name: Typechecking the code
-        entry: mypy --ignore-missing-imports
+        entry: pipenv run typecheck
+        pass_filenames: false
         language: system
         types: [python]
