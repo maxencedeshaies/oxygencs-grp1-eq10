@@ -78,7 +78,7 @@ class App:
         details = json.loads(r.text)
         print(details, flush=True)
 
-    def save_event_to_database(self, timestamp, temperature, databaseUrl, tableName):
+    def save_temperature_to_database(self, timestamp, temperature, databaseUrl, tableName):
         """Save sensor data into database."""
         if None not in (temperature, timestamp):
             sql = f"""INSERT INTO {tableName}(timestamp, temperature) VALUES(TIMESTAMP '{timestamp}',{temperature})"""

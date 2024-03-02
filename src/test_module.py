@@ -22,18 +22,18 @@ def clear_test_table():
         pass
     yield
 
-def test_save_event_to_database():
-    app.save_event_to_database(datetime.datetime.now(), 44, DATABASE_URL, testtable)
+def test_save_temperature_to_database():
+    app.save_temperature_to_database(datetime.datetime.now(), 44, DATABASE_URL, testtable)
     rows = get_rows()
     assert len(rows) > 0
 
-def test_save_event_to_database_null_timestamp():
-    app.save_event_to_database(None, 44, DATABASE_URL, testtable)
+def test_save_temperature_to_database_null_timestamp():
+    app.save_temperature_to_database(None, 44, DATABASE_URL, testtable)
     rows = get_rows()
     assert len(rows) == 0
     
 def test_save_event_to_database_null_temperature():
-    app.save_event_to_database(datetime.datetime.now(), None, DATABASE_URL, testtable)
+    app.save_temperature_to_database(datetime.datetime.now(), None, DATABASE_URL, testtable)
     rows = get_rows()
     assert len(rows) == 0
 
