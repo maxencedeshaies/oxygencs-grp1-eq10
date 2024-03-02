@@ -61,7 +61,7 @@ class App:
             timestamp = data[0]["date"]
             temperature = float(data[0]["data"])
             self.take_action(temperature)
-            self.save_event_to_database(timestamp, temperature, self.DATABASE_URL, "temperaturelog")
+            self.save_temperature_to_database(timestamp, temperature, self.DATABASE_URL, "temperaturelog")
         except Exception as err:
             print(err)
 
