@@ -1,9 +1,10 @@
 """Handles the main logic of the Oxygen CS application"""
 
 import logging
-import os
 import json
 import time
+import os
+import psycopg2
 import requests
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 
@@ -65,17 +66,22 @@ class App:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
             timestamp = data[0]["date"]
             temperature = float(data[0]["data"])
-            self.take_action(temperature)
-            self.save_event_to_database(timestamp, temperature)
+            self.take_action(temperature, timestamp)
+            self.save_temperature_to_database(timestamp, temperature, "temperaturelog")
         except Exception as err:
             print(err)
 
-    def take_action(self, temperature):
+    def take_action(self, temperature, timestamp):
         """Take action to HVAC depending on current temperature."""
         if float(temperature) >= float(self.t_max):
-            self.send_action_to_hvac("TurnOnAc")
+            action = "TurnOnAc"
+            self.send_action_to_hvac(action)
+            self.save_hvac_action_to_database(timestamp, action, temperature, self.t_max, "hvacactionlog")
         elif float(temperature) <= float(self.t_min):
-            self.send_action_to_hvac("TurnOnHeater")
+            action = "TurnOnHeater"
+            self.send_action_to_hvac(action)
+            self.save_hvac_action_to_database(timestamp, action, temperature, self.t_min, "hvacactionlog")
+
 
     def send_action_to_hvac(self, action):
         """Send action query to the HVAC service."""
@@ -85,16 +91,29 @@ class App:
         details = json.loads(r.text)
         print(details, flush=True)
 
-    def save_event_to_database(self, timestamp, temperature):
+    def save_temperature_to_database(self, timestamp, temperature, tableName):
         """Save sensor data into database."""
-        print(timestamp, temperature, flush=True)
-        try:
-            # To implement
-            pass
-        except requests.exceptions.RequestException as e:
-            print(e)
-            # To implement
-            pass
+        if None not in (temperature, timestamp):
+            sql = f"""INSERT INTO {tableName}(timestamp, temperature) VALUES(TIMESTAMP '{timestamp}',{temperature})"""
+            try:
+                with psycopg2.connect(self.database_url) as conn:
+                    with conn.cursor() as cur:
+                        cur.execute(sql)
+                        conn.commit()
+            except (requests.exceptions.RequestException, psycopg2.DatabaseError) as e:
+                print(e)
+
+    def save_hvac_action_to_database(self, timestamp, action, temperature, targettemperature, tableName):
+        """Save HVAC action to database"""
+        if None not in (temperature, timestamp, action):
+            sql = f"INSERT INTO {tableName}(timestamp, action, temperature, targetTemperature) VALUES(TIMESTAMP '{timestamp}', '{action}', {temperature}, {targettemperature})"
+            try:
+                with psycopg2.connect(self.database_url) as conn:
+                    with conn.cursor() as cur:
+                        cur.execute(sql)
+                        conn.commit()
+            except(requests.exceptions.RequestException, psycopg2.DatabaseError) as e:
+                print(e)
 
 
 if __name__ == "__main__":
