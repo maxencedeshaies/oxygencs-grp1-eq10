@@ -1,7 +1,6 @@
 """Handles the main logic of the Oxygen CS application"""
 
 import logging
-import os
 import json
 import time
 import os
