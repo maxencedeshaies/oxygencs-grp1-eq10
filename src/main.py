@@ -1,25 +1,31 @@
-from signalrcore.hub_connection_builder import HubConnectionBuilder
+"""Handles the main logic of the Oxygen CS application"""
+
 import logging
-import requests
+import os
 import json
 import time
-import os
+import requests
+from signalrcore.hub_connection_builder import HubConnectionBuilder
+
+# pylint: disable=broad-exception-caught, unnecessary-pass
 
 
 class App:
+    """Main class to handle the Oxygen CS application"""
+
     def __init__(self):
         self._hub_connection = None
-        self.TICKS = 10
+        self.ticks = 10
 
         # To be configured by your team
-        self.HOST = os.getenv('HOST', 'Host URL not found')
-        self.TOKEN = os.getenv('TOKEN', 'Token not found')
-        self.T_MAX = os.getenv('T_MAX', 'Max temp not found')
-        self.T_MIN = os.getenv('T_MIN', 'Min temp not found')
-        self.DATABASE_URL = os.getenv('DATABASE_URL', 'Database URL not found')
+        self.host = os.getenv("HOST", "Host URL not found")
+        self.token = os.getenv("TOKEN", "Token not found")
+        self.t_max = os.getenv("T_MAX", "Max temp not found")
+        self.t_min = os.getenv("T_MIN", "Min temp not found")
+        self.database_url = os.getenv("DATABASE_URL", "Database URL not found")
 
     def __del__(self):
-        if self._hub_connection != None:
+        if self._hub_connection is not None:
             self._hub_connection.stop()
 
     def start(self):
@@ -34,7 +40,7 @@ class App:
         """Configure hub connection and subscribe to sensor data events."""
         self._hub_connection = (
             HubConnectionBuilder()
-            .with_url(f"{self.HOST}/SensorHub?token={self.TOKEN}")
+            .with_url(f"{self.host}/SensorHub?token={self.token}")
             .configure_logging(logging.INFO)
             .with_automatic_reconnect(
                 {
@@ -66,23 +72,27 @@ class App:
 
     def take_action(self, temperature):
         """Take action to HVAC depending on current temperature."""
-        if float(temperature) >= float(self.T_MAX):
+        if float(temperature) >= float(self.t_max):
             self.send_action_to_hvac("TurnOnAc")
-        elif float(temperature) <= float(self.T_MIN):
+        elif float(temperature) <= float(self.t_min):
             self.send_action_to_hvac("TurnOnHeater")
 
     def send_action_to_hvac(self, action):
         """Send action query to the HVAC service."""
-        r = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}/{self.TICKS}")
+        r = requests.get(
+            f"{self.host}/api/hvac/{self.token}/{action}/{self.ticks}", timeout=5
+        )
         details = json.loads(r.text)
         print(details, flush=True)
 
     def save_event_to_database(self, timestamp, temperature):
         """Save sensor data into database."""
+        print(timestamp, temperature, flush=True)
         try:
             # To implement
             pass
         except requests.exceptions.RequestException as e:
+            print(e)
             # To implement
             pass
 
