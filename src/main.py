@@ -73,14 +73,14 @@ class App:
 
     def take_action(self, temperature, timestamp):
         """Take action to HVAC depending on current temperature."""
-        if float(temperature) >= float(self.T_MAX):
+        if float(temperature) >= float(self.t_max):
             action = "TurnOnAc"
             self.send_action_to_hvac(action)
-            self.save_hvac_action_to_database(timestamp, action, temperature, self.T_MAX, "hvacactionlog")
-        elif float(temperature) <= float(self.T_MIN):
+            self.save_hvac_action_to_database(timestamp, action, temperature, self.t_max, "hvacactionlog")
+        elif float(temperature) <= float(self.t_min):
             action = "TurnOnHeater"
             self.send_action_to_hvac(action)
-            self.save_hvac_action_to_database(timestamp, action, temperature, self.T_MIN, "hvacactionlog")
+            self.save_hvac_action_to_database(timestamp, action, temperature, self.t_min, "hvacactionlog")
 
 
     def send_action_to_hvac(self, action):
@@ -96,7 +96,7 @@ class App:
         if None not in (temperature, timestamp):
             sql = f"""INSERT INTO {tableName}(timestamp, temperature) VALUES(TIMESTAMP '{timestamp}',{temperature})"""
             try:
-                with psycopg2.connect(self.DATABASE_URL) as conn:
+                with psycopg2.connect(self.database_url) as conn:
                     with conn.cursor() as cur:
                         cur.execute(sql)
                         conn.commit()
@@ -108,7 +108,7 @@ class App:
         if None not in (temperature, timestamp, action):
             sql = f"INSERT INTO {tableName}(timestamp, action, temperature, targetTemperature) VALUES(TIMESTAMP '{timestamp}', '{action}', {temperature}, {targettemperature})"
             try:
-                with psycopg2.connect(self.DATABASE_URL) as conn:
+                with psycopg2.connect(self.database_url) as conn:
                     with conn.cursor() as cur:
                         cur.execute(sql)
                         conn.commit()
