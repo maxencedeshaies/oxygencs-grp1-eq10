@@ -1,4 +1,6 @@
 FROM python:3.8-alpine
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONFAULTHANDLER 1
 WORKDIR /app
 COPY Pipfile Pipfile.lock ./
 RUN pip install --no-cache-dir micropipenv[toml] && \
