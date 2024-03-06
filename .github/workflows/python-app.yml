@@ -50,3 +50,5 @@ jobs:
         pipenv install -r requirements.txt
     - name: Lint with pylint
       run: pipenv run pytest
+      env:
+        DATABASE_URL: ${{secrets.DATABASE_URL}}
