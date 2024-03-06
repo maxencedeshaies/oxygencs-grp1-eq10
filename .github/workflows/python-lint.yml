@@ -1,0 +1,34 @@
+name: Analyse statique de code et de formatage
+
+on:
+  push:
+    branches: [ "16-mettre-en-place-le-workflow-github" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+    - name: Install dependencies
+      run: |
+        python -m pipenv install
+        pipenv install --dev
+    - name: Lint with pylint
+      run: |
+        # Stop the build if pylint encounters an error
+        pipenv run pylint --recursive=y src
+    - name: Format with black
+      run: pipenv run black src
+    - name: Typecheck the code
+      run: pipenv run mypy src --ignore-missing-imports
