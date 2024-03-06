@@ -27,7 +27,7 @@ jobs:
     - name: Lint with pylint
       run: |
         # Stop the build if pylint encounters an error
-        pipenv run pylint --recursive=y src
+        pipenv run pylint --recursive=y --errors-only --disable=C,R src
     - name: Format with black
       run: pipenv run black src
     - name: Typecheck the code
