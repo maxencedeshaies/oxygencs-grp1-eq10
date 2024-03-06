@@ -1,0 +1,10 @@
+requests
+signalrcore
+pytest
+psycopg2-binary
+pylint
+pytest
+black
+mypy
+pre-commit
+types-requests
