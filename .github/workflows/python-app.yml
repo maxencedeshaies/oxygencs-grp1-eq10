@@ -10,10 +10,9 @@ permissions:
   contents: read
 
 jobs:
-  setup:
-    name: Setup de Python et installation des dépendances
+  lint:
+    name: Linting du code Python
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.8
@@ -24,12 +23,6 @@ jobs:
       run: |
         python -m pip install pipenv
         pipenv install --dev
-        pipenv install
-  lint:
-    needs: setup
-    name: Linting du code Python
-    runs-on: ubuntu-latest
-    steps:
     - name: Lint with pylint
       run: |
         # Stop the build if pylint encounters an error
@@ -40,9 +33,17 @@ jobs:
       run: pipenv run mypy src --ignore-missing-imports
   
   test:
-    needs: [setup, lint]
+    needs: lint
     name: Exécution des tests
-    runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+    - name: Install dependencies
+      run: |
+        python -m pip install pipenv
+        pipenv install
     - name: Lint with pylint
       run: pipenv run pytest
