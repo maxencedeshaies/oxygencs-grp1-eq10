@@ -10,8 +10,8 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
+  setup:
+    name: Setup de Python et installation des dépendances
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,11 @@ jobs:
       run: |
         python -m pipenv install
         pipenv install --dev
+        pipenv install
+  lint:
+    needs: setup
+    name: Linting du code Python
+    steps:
     - name: Lint with pylint
       run: |
         # Stop the build if pylint encounters an error
@@ -32,3 +37,10 @@ jobs:
       run: pipenv run black src
     - name: Typecheck the code
       run: pipenv run mypy src --ignore-missing-imports
+  
+  test:
+    needs: [setup, lint]
+    name: Exécution des tests
+    steps:
+    - name: Lint with pylint
+      run: pipenv run pytest
