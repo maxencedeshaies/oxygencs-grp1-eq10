@@ -14,9 +14,9 @@ jobs:
     name: Linting du code Python
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python 3.8
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: "3.8"
     - name: Install dependencies
@@ -38,9 +38,9 @@ jobs:
     name: Exécution des tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python 3.8
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: "3.8"
     - name: Install dependencies
@@ -58,11 +58,11 @@ jobs:
     name: Création et publication de l'image Docker
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Connexion à Docker Hub
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
       with:
-        username: ${{secrets.DOCKER_USERNAME}}
+        username: eq110
         password: ${{secrets.DOCKER_PASSWORD}}
     - name: Extraire metadata pour Docker
       id: meta
