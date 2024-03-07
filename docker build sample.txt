@@ -1,0 +1,7 @@
+docker build \
+-t eq110/oxygencs-h24-grp1-eq10 . \
+--build-arg HOST= \
+--build-arg TOKEN= \
+--build-arg T_MAX= \
+--build-arg T_MIN= \
+--build-arg DATABASE_URL=
