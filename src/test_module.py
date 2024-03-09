@@ -6,7 +6,7 @@ import pytest
 from .main import App
 app = App()
 
-DATABASE_URL = os.getenv('DATABASE_URL', 'Database URL not found')
+DATABASE_URL = os.getenv("DATABASE_URL", "Database URL not found")
 temperatureLogTestTable = "temperaturelogtest"
 hvacActionLogTestTable = "hvacactionlogtest"
 
