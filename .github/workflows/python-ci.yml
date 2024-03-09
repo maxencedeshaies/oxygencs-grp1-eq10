@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "16-mettre-en-place-le-workflow-github" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
