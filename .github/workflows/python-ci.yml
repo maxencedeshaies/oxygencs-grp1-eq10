@@ -2,9 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -57,6 +55,7 @@ jobs:
     needs: [lint, test]
     name: Création et publication de l'image Docker
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.ref == 'refs/head/main'
     steps:
     - uses: actions/checkout@v4
     - name: Connexion à Docker Hub
