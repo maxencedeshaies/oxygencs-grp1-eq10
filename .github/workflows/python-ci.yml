@@ -2,9 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -48,7 +45,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install -r requirements.txt
-    - name: Lint with pylint
+    - name: Run pytest
       run: pipenv run pytest
       env:
         DATABASE_URL: ${{secrets.DATABASE_URL}}
@@ -57,6 +54,7 @@ jobs:
     needs: [lint, test]
     name: Création et publication de l'image Docker
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/head/main'
     steps:
     - uses: actions/checkout@v4
     - name: Connexion à Docker Hub
@@ -70,8 +68,7 @@ jobs:
       with:
         images: eq110/oxygencs-h24-gr1-eq10
         tags: |
-          type=ref,event=pr
-          type=ref,event=branch
+          type=raw,value=${{ github.run_id }}
           type=raw,value=latest
     - name: Créer et publier image Docker
       uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
