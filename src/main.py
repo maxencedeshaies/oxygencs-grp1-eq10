@@ -12,7 +12,7 @@ from signalrcore.hub_connection_builder import HubConnectionBuilder
 
 
 class App:
-    """Main class to handle the Oxygen CS application!"""
+    """Main class to handle the Oxygen CS application!!"""
 
     def __init__(self):
         self._hub_connection = None
