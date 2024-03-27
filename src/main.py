@@ -25,6 +25,8 @@ class App:
         self.t_min = os.getenv("T_MIN", "Min temp not found")
         self.database_url = os.getenv("DATABASE_URL", "Database URL not found")
 
+        self.conn = psycopg2.connect(self.database_url)
+
     def __del__(self):
         if self._hub_connection is not None:
             self._hub_connection.stop()
@@ -96,10 +98,9 @@ class App:
         if None not in (temperature, timestamp):
             sql = f"""INSERT INTO {tableName}(timestamp, temperature) VALUES(TIMESTAMP '{timestamp}',{temperature})"""
             try:
-                with psycopg2.connect(self.database_url) as conn:
-                    with conn.cursor() as cur:
-                        cur.execute(sql)
-                        conn.commit()
+                with self.conn:
+                    with self.conn.cursor() as self.cur:
+                        self.cur.execute(sql)
             except (requests.exceptions.RequestException, psycopg2.DatabaseError) as e:
                 print(e)
 
@@ -108,10 +109,9 @@ class App:
         if None not in (temperature, timestamp, action):
             sql = f"INSERT INTO {tableName}(timestamp, action, temperature, targetTemperature) VALUES(TIMESTAMP '{timestamp}', '{action}', {temperature}, {targettemperature})"
             try:
-                with psycopg2.connect(self.database_url) as conn:
-                    with conn.cursor() as cur:
-                        cur.execute(sql)
-                        conn.commit()
+                with self.conn:
+                    with self.conn.cursor() as self.cur:
+                        self.cur.execute(sql)
             except(requests.exceptions.RequestException, psycopg2.DatabaseError) as e:
                 print(e)
 
