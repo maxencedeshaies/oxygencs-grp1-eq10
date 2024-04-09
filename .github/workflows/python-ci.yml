@@ -95,6 +95,7 @@ jobs:
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
     - name: Déployer à K8S
+      uses: actions/checkout@v2
       uses: Azure/k8s-deploy@v4
       with:
         action: deploy
