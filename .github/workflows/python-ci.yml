@@ -85,4 +85,16 @@ jobs:
         push: true
         tags: ${{steps.meta.outputs.tags}}
         labels: ${{steps.meta.outputs.labels}}
-  
+  kubernetes:
+    needs: [ lint, test, docker ]
+    name: Déploiement à K8S
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+    steps:
+    - name: Déployer à K8S
+      uses: TanmoySG/k-deploy-action@v0.2.2-alpha
+      with:
+        # Path to Kubeconfig
+        kubeconfig: ${{secrets.KUBECONFIG}}
+        # Path to manifest Files
+        manifest: ['manifests/cronjob.yaml', 'manifests/ingress_metrics.yaml', 'manifests/metrics_configmap.yaml', 'manifests/metrics_deployment.yaml', 'manifests/metrics_service.yaml', 'manifests/oxygen_configmap.yaml', 'manifests/oxygen_deployment.yaml']
