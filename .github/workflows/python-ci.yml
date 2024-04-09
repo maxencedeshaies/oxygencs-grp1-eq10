@@ -99,9 +99,4 @@ jobs:
       with:
         action: deploy
         manifests: |
-          manifests/cronjob.yaml
-          manifests/ingress_metrics.yaml
-          manifests/metrics_configmap.yaml
-          manifests/metrics_deployment.yaml
-          manifests/metrics_service.yaml
-          manifests/oxygen_configmap.yaml
+          manifests
