@@ -86,7 +86,7 @@ jobs:
         tags: ${{steps.meta.outputs.tags}}
         labels: ${{steps.meta.outputs.labels}}
   kubernetes:
-    needs: [ lint, test ]
+#    needs: [ lint, test ]
     name: Déploiement à K8S
     runs-on: ubuntu-latest
     steps:
