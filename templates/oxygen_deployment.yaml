@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oxygencs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oxygencs-h24-gr1-eq10
+  template:
+    metadata:
+      labels:
+        app: oxygencs-h24-gr1-eq10
+    spec:
+      containers:
+      - name: oxygencs-h24-gr1-eq10
+        image: eq110/oxygencs-h24-gr1-eq10:latest
+        envFrom:
+        - secretRef:
+            name: oxygencs
+        - configMapRef:
+            name: oxygencs
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
