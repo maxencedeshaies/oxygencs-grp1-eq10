@@ -91,10 +91,18 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged
     steps:
-    - name: Déployer à K8S
-      uses: TanmoySG/k-deploy-action@v0.2.2-alpha
+    - name: Context?
+      uses: Azure/k8s-set-context@v5
       with:
-        # Path to Kubeconfig
-        kubeconfig: ${{secrets.KUBECONFIG}}
-        # Path to manifest Files
-        manifest: ['manifests/cronjob.yaml', 'manifests/ingress_metrics.yaml', 'manifests/metrics_configmap.yaml', 'manifests/metrics_deployment.yaml', 'manifests/metrics_service.yaml', 'manifests/oxygen_configmap.yaml', 'manifests/oxygen_deployment.yaml']
+        kubeconfig: ${{ secrets.KUBECONFIG }}
+    - name: Déployer à K8S
+      uses: Azure/k8s-deploy@v5
+      with:
+        action: deploy
+        manifests: |
+          manifests/cronjob.yaml
+          manifests/ingress_metrics.yaml
+          manifests/metrics_configmap.yaml
+          manifests/metrics_deployment.yaml
+          manifests/metrics_service.yaml
+          manifests/oxygen_configmap.yaml
