@@ -86,10 +86,9 @@ jobs:
         tags: ${{steps.meta.outputs.tags}}
         labels: ${{steps.meta.outputs.labels}}
   kubernetes:
-    needs: [ lint, test, docker ]
+    needs: [ lint, test ]
     name: Déploiement à K8S
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged
     steps:
     - name: Context?
       uses: Azure/k8s-set-context@v5
